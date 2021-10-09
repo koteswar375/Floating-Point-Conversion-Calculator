@@ -18,3 +18,9 @@ D. The app should be able to identify the following characteristic of inputs and
 
 
 ==========================================================================
+
+1) Install python
+2) Run npm install in the root folder.
+3) Run npm start. 
+4) Go to server folder and start python server by running the command "python main.py"
+5) Open the browser and enter the address "http://localhost:3000"
