@@ -1,0 +1,23 @@
+.output {
+    width: 75%;
+    padding: 30px;
+}
+
+.format {
+    display:flex;
+    padding: 10px;
+}
+
+.outputformat {
+    display: flex;
+    padding: 10px;
+}
+
+.home {
+    padding:50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
