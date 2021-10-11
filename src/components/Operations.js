@@ -14,14 +14,18 @@ const Operations = () => {
 
     const handleChange = (event) => {
         const val = event.target.value;
-        setFormat(val)
+        event.preventDefault();
+        setFormat(val);
+        setbinVal('')
+        sethexVal('')
+        setrealVal('')
     }
     const handleSelect = (event)=> {
         const val = event.target.value;
         setOperation(val);
     }
     const submit = (event) => {
-            axios.post('http://192.168.0.14:5000/operation', { format, val1, val2, operation })
+            axios.post('http://192.168.0.10:5000/operation', { format, val1, val2, operation })
                 .then((res) => {
                     const { realVal, binVal, hexVal } = res['data'];
                     setbinVal(binVal)
@@ -37,15 +41,15 @@ const Operations = () => {
         <div className="container">
             <div className="format">
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" checked onChange={handleChange} name="input_format" value='real' type="radio" id="real" />
+                    <input className="form-check-input" checked onChange={handleChange} name="input_format1" value='real' type="radio" id="real" />
                     <label className="form-check-label" htmlFor="real">Decimal</label>
                 </div>
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" onChange={handleChange} name="input_format" value='bin' type="radio" id="bin" />
+                    <input className="form-check-input" onChange={handleChange} name="input_format1" value='bin' type="radio" id="bin" />
                     <label className="form-check-label" htmlFor="bin">Floating point</label>
                 </div>
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" onChange={handleChange} name="input_format" value='hex' type="radio" id="hex" />
+                    <input className="form-check-input" onChange={handleChange} name="input_format1" value='hex' type="radio" id="hex" />
                     <label className="form-check-label" htmlFor="hex">HexaDecimal</label>
                 </div>
             </div>
