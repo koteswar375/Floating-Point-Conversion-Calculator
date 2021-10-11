@@ -11,17 +11,17 @@ const Operations = () => {
     const [hexVal, sethexVal] = useState('');
     const [val1, setVal1] = useState('');
     const [val2, setVal2] = useState('');
-    
+
     const handleChange = (event) => {
         const val = event.target.value;
         setFormat(val)
     }
     const handleSelect = (event)=> {
-        const val = event.target.val;
+        const val = event.target.value;
         setOperation(val);
     }
     const submit = (event) => {
-            axios.post('http://10.57.213.113:5000/', { format, val1, val2, operation })
+            axios.post('http://192.168.0.10:5000/operation', { format, val1, val2, operation })
                 .then((res) => {
                     const { realVal, binVal, hexVal } = res['data'];
                     setbinVal(binVal)
@@ -30,6 +30,7 @@ const Operations = () => {
                 })
                 .catch((error) => {
                     console.log(error)
+                    alert("Invalid inputs")
                 })
     }
     return (
@@ -50,16 +51,16 @@ const Operations = () => {
             </div>
             <div className="input">
                 <div>
-                    <input type="text" style={{ flexGrow:2,margin: '10px' }} placeholder="Enter the first value" className="form-control" />
-                    <input type="text" style={{ flexGrow:2,margin: '10px' }} placeholder="Enter the second value" className="form-control" />
+                    <input onChange= {(e)=>setVal1(e.target.value)} type="text" style={{ margin: '10px' }} placeholder="Enter the first value" className="form-control" />
+                    <input onChange= {(e)=>setVal2(e.target.value)} type="text" style={{ margin: '10px' }} placeholder="Enter the second value" className="form-control" />
                 </div>
-                <select onChange= {handleSelect} style={{ width:'30%'}} className="form-select" aria-label="Default select example">
+                <select onChange= {handleSelect} value={operation} style={{ width:'30%'}} className="form-select" aria-label="Default select example">
                     <option defaultValue>Select Operation</option>
                     <option value="add">Addition</option>
                     <option value="subtract">Subtraction</option>
                     <option value="multiply">Multiplication</option>
                 </select>
-                <button onClick={submit} type="button" class="btn btn-primary">Submit</button>
+                <button onClick={submit} type="button" className="btn btn-primary">Submit</button>
             </div>
             <div className="output">
                 <div className="outputformat form-group row">

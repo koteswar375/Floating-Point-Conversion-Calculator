@@ -81,6 +81,5 @@ def real2floatingPoint(real_no):
     ind = int_str.index('1')
     exp_str = bin((len(int_str) - ind - 1) + 127)[2 : ]
     mant_str = int_str[ind + 1 : ] + fraction_str
-    mant_str = mant_str + ('0' * (23 - len(mant_str)))
- 
-    return str(sign_bit) + " | " + str(exp_str) + " | " + str(mant_str)
+    mant_str = mant_str + ('0' * (23 - len(mant_str)))[:24]
+    return str(sign_bit) + " | " + str(exp_str) + " | " + str(mant_str)[:23]
