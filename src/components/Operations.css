@@ -1,0 +1,27 @@
+.format {
+    display:flex;
+    padding: 10px;
+}
+
+
+.container {
+    padding:50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.input {
+    display: flex;
+    width:70%;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.outputformat {
+    display: flex;
+    padding: 10px;
+}
+
