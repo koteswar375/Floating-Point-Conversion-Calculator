@@ -1,3 +1,5 @@
+import binascii
+import struct
 def __binaryOfFraction__(fraction):
  
     binary = str()
@@ -84,3 +86,11 @@ def real2floatingPoint(real_no):
     mant_str = mant_str + ('0' * (23 - len(mant_str)))
  
     return str(sign_bit) + " | " + str(exp_str) + " | " + str(mant_str)
+def hex2real(data):
+    return struct.unpack('!f', bytes.fromhex(data))[0]
+def hex2float():
+    data = 'F9 7B 9C 45'
+    fdata = struct.unpack('<f', binascii.unhexlify(data.replace(' ', '')))[0]
+    deg = fdata // 100 + (fdata % 100) / 60
+    print(fdata)
+    print(deg)
