@@ -94,3 +94,4 @@ def hex2float():
     deg = fdata // 100 + (fdata % 100) / 60
     print(fdata)
     print(deg)
+    

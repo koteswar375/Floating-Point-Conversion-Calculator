@@ -17,7 +17,7 @@ const Home = () => {
     const handleEnter = (event) => {
         if (event.key === 'Enter') {
             const value = event.target.value;
-            axios.post('http://10.57.213.113:5000/', { format, value })
+            axios.post('http://192.168.0.10:5000/conversion', { format, value })
                 .then((res) => {
                     const { realVal, binVal, hexVal } = res['data'];
                     setbinVal(binVal)
@@ -26,6 +26,7 @@ const Home = () => {
                 })
                 .catch((error) => {
                     console.log(error)
+                    alert("Invalid inputs")
                 })
         }
     }
