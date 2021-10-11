@@ -21,7 +21,7 @@ const Operations = () => {
         setOperation(val);
     }
     const submit = (event) => {
-            axios.post('http://192.168.0.10:5000/operation', { format, val1, val2, operation })
+            axios.post('http://192.168.0.14:5000/operation', { format, val1, val2, operation })
                 .then((res) => {
                     const { realVal, binVal, hexVal } = res['data'];
                     setbinVal(binVal)

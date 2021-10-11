@@ -17,7 +17,7 @@ const Home = () => {
     const handleEnter = (event) => {
         if (event.key === 'Enter') {
             const value = event.target.value;
-            axios.post('http://192.168.0.10:5000/conversion', { format, value })
+            axios.post('http://192.168.0.14:5000/conversion', { format, value })
                 .then((res) => {
                     const { realVal, binVal, hexVal } = res['data'];
                     setbinVal(binVal)

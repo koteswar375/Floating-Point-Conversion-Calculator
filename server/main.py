@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
-from conversions import real2floatingPoint, real2hex
-
+from conversions import real2floatingPoint, real2hex, hex2real, hex2float, float2hex, float2real
+from operations import operate
 app = Flask(__name__)
 CORS(app)
 
@@ -21,6 +21,15 @@ def handlePost():
         hexVal = real2hex(input)
         binVal = real2floatingPoint(input)
         realVal = input
+    elif format == "hex":
+        hexVal = input
+        realVal = hex2real(input)
+        binVal = hex2float(input)
+    elif format == "bin":
+        binVal = input
+        realVal = float2real(input)
+        hexVal = float2hex(input)
+        
     return {'hexVal':hexVal, 'binVal': binVal , 'realVal': realVal}
 
 @app.route('/operation', methods = ['POST'])
@@ -33,13 +42,23 @@ def handleOperation():
     if not format or not val1 or not val2 or not operation:
         return 'bad request', 400
     if format == "real":
-        output = 0
-        if operation == "add":
-            output = float(val1) + float(val2)
-        elif operation == "subtract":
-            output = float(val1) - float(val2)
-        elif operation == "multiply":
-            output = float(val1) * float(val2)        
+        val1 = float(val1)
+        val2 = float(val2)
+        output = operate(val1, val2, operation)        
+        hexVal = real2hex(output)
+        binVal = real2floatingPoint(output)
+        realVal = output
+    elif format == "hex":
+        val1 = hex2real(val1)
+        val2 = hex2real(val2)
+        output = operate(val1, val2, operation)        
+        hexVal = real2hex(output)
+        binVal = real2floatingPoint(output)
+        realVal = output
+    elif format == "bin":
+        val1 = float2real(val1)
+        val2 = float2real(val2)
+        output = operate(val1, val2, operation)        
         hexVal = real2hex(output)
         binVal = real2floatingPoint(output)
         realVal = output

@@ -85,13 +85,19 @@ def real2floatingPoint(real_no):
     mant_str = int_str[ind + 1 : ] + fraction_str
     mant_str = mant_str + ('0' * (23 - len(mant_str)))
  
-    return str(sign_bit) + " | " + str(exp_str) + " | " + str(mant_str)
+    return str(sign_bit) + " | " + str(exp_str) + " | " + str(mant_str)[:23]
 def hex2real(data):
     return struct.unpack('!f', bytes.fromhex(data))[0]
-def hex2float():
-    data = 'F9 7B 9C 45'
-    fdata = struct.unpack('<f', binascii.unhexlify(data.replace(' ', '')))[0]
-    deg = fdata // 100 + (fdata % 100) / 60
-    print(fdata)
-    print(deg)
+
+def hex2float(input):
+    # fdata = struct.unpack('<f', binascii.unhexlify(input.replace(' ', '')))[0]
+    # deg = fdata // 100 + (fdata % 100) / 60
+    # return deg
+    return "###"
+
+def float2hex(input):
+    return "###"
+
+def float2real(input):
+    return "###"
     
