@@ -90,10 +90,9 @@ def hex2real(data):
     return struct.unpack('!f', bytes.fromhex(data))[0]
 
 def hex2float(input):
-    # fdata = struct.unpack('<f', binascii.unhexlify(input.replace(' ', '')))[0]
-    # deg = fdata // 100 + (fdata % 100) / 60
-    # return deg
-    return "###"
+    realconv = struct.unpack('!f', bytes.fromhex(input))[0]
+    hextofloatres = real2floatingPoint(realconv)
+    return hextofloatres
 
 def float2hex(input):
     return "###"
