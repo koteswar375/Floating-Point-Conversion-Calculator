@@ -8,16 +8,22 @@ const Home = () => {
     const [realVal, setrealVal] = useState('');
     const [binVal, setbinVal] = useState('');
     const [hexVal, sethexVal] = useState('');
+    const [val, setVal] = useState('');
 
 
     const handleChange = (event) => {
-        const val = event.target.value;
-        setFormat(val)
+        const format = event.target.value;
+        event.preventDefault();
+        setFormat(format);
+        setbinVal('');
+        sethexVal('');
+        setrealVal('');
+        setVal('');
     }
     const handleEnter = (event) => {
         if (event.key === 'Enter') {
             const value = event.target.value;
-            axios.post('http://192.168.0.14:5000/conversion', { format, value })
+            axios.post('http://192.168.0.10:5000/conversion', { format, value })
                 .then((res) => {
                     const { realVal, binVal, hexVal } = res['data'];
                     setbinVal(binVal)
@@ -46,7 +52,7 @@ const Home = () => {
                     <label className="form-check-label" htmlFor="hex">HexaDecimal</label>
                 </div>
             </div>
-            <input type="text" style={{ width: '30%', margin: '10px' }} placeholder="Enter the input" className="form-control" onKeyPress={handleEnter} />
+            <input type="text" value={val} onChange= {(e)=>setVal(e.target.value)} style={{ width: '30%', margin: '10px' }} placeholder="Enter the input" className="form-control" onKeyPress={handleEnter} />
             <div className="output">
                 <div className="outputformat form-group row">
                     <label className="col-sm-2 col-form-label" htmlFor="decimal">Decimal</label>
