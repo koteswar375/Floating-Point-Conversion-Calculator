@@ -26,6 +26,36 @@ def __float_bin__(my_number, places = 3):
         my_whole, my_dec = temp.split(".")
         res += my_whole
     return res
+
+def convertToInt(mantissa_str):
+ 
+    # variable to make a count
+    # of negative power of 2.
+    power_count = -1
+ 
+    # variable to store
+    # float value of mantissa.
+    mantissa_int = 0
+ 
+    # Iterations through binary
+    # Number. Standard form of
+    # Mantissa is 1.M so we have
+    # 0.M therefore we are taking
+    # negative powers on 2 for
+    # conversion.
+    for i in mantissa_str:
+ 
+        # Adding converted value of
+        # Binary bits in every
+        # iteration to float mantissa.
+        mantissa_int += (int(i) * pow(2, power_count))
+ 
+        # count will decrease by 1
+        # as we move toward right.
+        power_count -= 1
+         
+    # returning mantissa in 1.M form.
+    return (mantissa_int + 1)
  
  
  
@@ -86,6 +116,7 @@ def real2floatingPoint(real_no):
     mant_str = mant_str + ('0' * (23 - len(mant_str)))
  
     return str(sign_bit) + " | " + str(exp_str) + " | " + str(mant_str)[:23]
+    
 def hex2real(data):
     return struct.unpack('!f', bytes.fromhex(data))[0]
 
@@ -95,8 +126,20 @@ def hex2float(input):
     return hextofloatres
 
 def float2hex(input):
-    return "###"
+    realVal = float2real(input)
+    return real2hex(realVal)
 
-def float2real(input):
-    return "###"
+def float2real(ieee_32):
+    sign_bit = int(ieee_32[0])
+    
+    exponent_bias = int(ieee_32[2 : 10], 2)
+ 
+    exponent_unbias = exponent_bias - 127
+   
+    mantissa_str = ieee_32[11 : ]
+ 
+    mantissa_int = convertToInt(mantissa_str)
+
+    real_no = pow(-1, sign_bit) * mantissa_int * pow(2, exponent_unbias)
+    return real_no
     
