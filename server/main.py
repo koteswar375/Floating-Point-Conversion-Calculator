@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS
-from conversions import real2floatingPoint, real2hex, hex2real, hex2float, float2hex, float2real
+from conversions import real2floatingPoint, real2hex, hex2real, hex2float, float2hex, float2real, convertToInt
 from operations import operate
 app = Flask(__name__)
 CORS(app)
@@ -19,12 +19,18 @@ def handlePost():
     if format == "real":
         input = float(input)
         hexVal = real2hex(input)
-        binVal = real2floatingPoint(input)
+        binaryString = real2floatingPoint(input)
+        sign, exp, mantissa = binaryString.split(" | ")
+        binVal = {"sign":sign,"exp":exp,"mantissa":mantissa, "sign_e":sign,"exp_e":int(exp,2),
+        "mantissa_e":convertToInt(mantissa),"mantissa_int": int(mantissa,2) }
         realVal = input
     elif format == "hex":
         hexVal = input
         realVal = hex2real(input)
-        binVal = hex2float(input)
+        binaryString = hex2float(input)
+        sign, exp, mantissa = binaryString.split(" | ")
+        binVal = {"sign":sign,"exp":exp,"mantissa":mantissa, "sign_e":sign,"exp_e":int(exp,2),
+        "mantissa_e":convertToInt(mantissa),"mantissa_int": int(mantissa,2) }
     elif format == "bin":
         binVal = input
         realVal = float2real(input)

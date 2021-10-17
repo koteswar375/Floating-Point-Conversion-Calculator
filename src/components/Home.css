@@ -8,10 +8,12 @@
     padding: 10px;
 }
 
-.outputformat {
+.iee754 {
     display: flex;
-    padding: 10px;
+    flex-direction: column;
 }
+
+
 
 .home {
     padding:50px;

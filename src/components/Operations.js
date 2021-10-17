@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import './Operations.css';
+import URL from '../config';
 
 
 const Operations = () => {
@@ -25,7 +26,7 @@ const Operations = () => {
         setOperation(val);
     }
     const submit = (event) => {
-            axios.post('http://10.57.213.113:5000/operation', { format, val1, val2, operation })
+            axios.post(`${URL}/operation`, { format, val1, val2, operation })
                 .then((res) => {
                     const { realVal, binVal, hexVal } = res['data'];
                     setbinVal(binVal)
@@ -42,11 +43,11 @@ const Operations = () => {
             <div className="format">
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" checked onChange={handleChange} name="input_format1" value='real' type="radio" id="real" />
-                    <label className="form-check-label" htmlFor="real">Decimal</label>
+                    <label className="form-check-label" htmlFor="real">Floating point</label>
                 </div>
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" onChange={handleChange} name="input_format1" value='bin' type="radio" id="bin" />
-                    <label className="form-check-label" htmlFor="bin">Floating point</label>
+                    <label className="form-check-label" htmlFor="bin">IEE754</label>
                 </div>
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" onChange={handleChange} name="input_format1" value='hex' type="radio" id="hex" />
@@ -68,15 +69,17 @@ const Operations = () => {
             </div>
             <div className="output">
                 <div className="outputformat form-group row">
-                    <label className="col-sm-2 col-form-label" htmlFor="decimal">Decimal</label>
+                    <label className="col-sm-2 col-form-label" htmlFor="decimal">Floating point</label>
                     <div className="col-sm-8">
                         <input id="decimal" placeholder="decimal" className="form-control " value={realVal} type="text" disabled />
                     </div>
                 </div>
                 <div className="outputformat form-group row">
-                    <label className="col-sm-2 col-form-label" htmlFor="float">Floating Point</label>
-                    <div className="col-sm-8">
-                        <input id="float" placeholder="sign | mantissa | exponent" className="form-control" value={binVal} type="text" disabled />
+                    <label className="col-sm-2 col-form-label" htmlFor="float">IEE754</label>
+                    <div className="col-sm-8 row justify-content-around">
+                        <input id="float" placeholder="sign" style={{width:'30%'}} className="form-control" value={binVal} type="text" disabled />
+                        <input id="float" placeholder="exponent" style={{width:'30%'}} className="form-control" value={binVal} type="text" disabled />
+                        <input id="float" placeholder="mantissa" style={{width:'30%'}} className="form-control" value={binVal} type="text" disabled />
                     </div>
                 </div>
                 <div className="outputformat form-group row">
