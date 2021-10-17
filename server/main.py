@@ -52,21 +52,30 @@ def handleOperation():
         val2 = float(val2)
         output = operate(val1, val2, operation)        
         hexVal = real2hex(output)
-        binVal = real2floatingPoint(output)
+        binaryString = real2floatingPoint(output)
+        sign, exp, mantissa = binaryString.split(" | ")
+        binVal = {"sign":sign,"exp":exp,"mantissa":mantissa, "sign_e":sign,"exp_e":int(exp,2),
+        "mantissa_e":convertToInt(mantissa),"mantissa_int": int(mantissa,2) }
         realVal = output
     elif format == "hex":
         val1 = hex2real(val1)
         val2 = hex2real(val2)
         output = operate(val1, val2, operation)        
         hexVal = real2hex(output)
-        binVal = real2floatingPoint(output)
+        binaryString = real2floatingPoint(output)
+        sign, exp, mantissa = binaryString.split(" | ")
+        binVal = {"sign":sign,"exp":exp,"mantissa":mantissa, "sign_e":sign,"exp_e":int(exp,2),
+        "mantissa_e":convertToInt(mantissa),"mantissa_int": int(mantissa,2) }
         realVal = output
     elif format == "bin":
         val1 = float2real(val1)
         val2 = float2real(val2)
         output = operate(val1, val2, operation)        
         hexVal = real2hex(output)
-        binVal = real2floatingPoint(output)
+        binaryString = real2floatingPoint(output)
+        sign, exp, mantissa = binaryString.split(" | ")
+        binVal = {"sign":sign,"exp":exp,"mantissa":mantissa, "sign_e":sign,"exp_e":int(exp,2),
+        "mantissa_e":convertToInt(mantissa),"mantissa_int": int(mantissa,2) }
         realVal = output
     
     return {'hexVal':hexVal, 'binVal': binVal , 'realVal': realVal}

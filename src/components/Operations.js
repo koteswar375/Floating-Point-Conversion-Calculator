@@ -15,7 +15,6 @@ const Operations = () => {
 
     const handleChange = (event) => {
         const val = event.target.value;
-        event.preventDefault();
         setFormat(val);
         setbinVal('')
         sethexVal('')
@@ -42,7 +41,7 @@ const Operations = () => {
         <div className="container">
             <div className="format">
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" checked onChange={handleChange} name="input_format1" value='real' type="radio" id="real" />
+                    <input className="form-check-input" checked={format==="real"} onChange={handleChange} name="input_format1" value='real' type="radio" id="real" />
                     <label className="form-check-label" htmlFor="real">Floating point</label>
                 </div>
                 <div className="form-check form-check-inline">
@@ -74,12 +73,24 @@ const Operations = () => {
                         <input id="decimal" placeholder="decimal" className="form-control " value={realVal} type="text" disabled />
                     </div>
                 </div>
-                <div className="outputformat form-group row">
+                <div className="row form-group justify-content-left p-2 align-items-center border border-info rounded">
                     <label className="col-sm-2 col-form-label" htmlFor="float">IEE754</label>
-                    <div className="col-sm-8 row justify-content-around">
-                        <input id="float" placeholder="sign" style={{width:'30%'}} className="form-control" value={binVal} type="text" disabled />
-                        <input id="float" placeholder="exponent" style={{width:'30%'}} className="form-control" value={binVal} type="text" disabled />
-                        <input id="float" placeholder="mantissa" style={{width:'30%'}} className="form-control" value={binVal} type="text" disabled />
+                    <div className="ieee754 col-sm-8">
+                        <div className="d-flex justify-content-around p-1">
+                            <input id="sign" placeholder="sign"  className="form-control" value={binVal? ((binVal['sign'] === "1") ? "-1": "+1"): ""} type="text" disabled />
+                            <input id="exponent" placeholder="exponent"  className="form-control mx-2" value={binVal? `${parseInt(binVal['exp_e']) - 127}` : ""} type="text" disabled />
+                            <input id="mantissa" placeholder="mantissa"  className="form-control" value={binVal?binVal['mantissa_e']:''} type="text" disabled />
+                        </div>
+                        <div className="d-flex justify-content-around p-1">
+                            <input id="sign-encode" placeholder="sign (Encoded as)"  className="form-control" value={binVal?binVal['sign']:''} type="text" disabled />
+                            <input id="exponent-encode" placeholder="exponent (Encoded as)"  className="form-control mx-2" value={binVal?binVal['exp_e']:''} type="text" disabled />
+                            <input id="mantissa-encode" placeholder="mantissa (Encoded as)"  className="form-control" value={binVal ? binVal["mantissa_int"]:""} type="text" disabled />
+                        </div>
+                        <div className="d-flex justify-content-around p-1">
+                            <input id="sign bit" placeholder="sign (binary)"  className="form-control" value={binVal?binVal['sign']:''} type="text" disabled />
+                            <input id="exponent bits" placeholder="exponent (binary)"  className="form-control mx-2" value={binVal?binVal['exp']:''} type="text" disabled />
+                            <input id="mantissa bits" placeholder="mantissa (binary)"  className="form-control" value={binVal?binVal['mantissa']:''} type="text" disabled />
+                        </div>
                     </div>
                 </div>
                 <div className="outputformat form-group row">

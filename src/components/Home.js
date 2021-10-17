@@ -13,7 +13,6 @@ const Home = () => {
 
     const handleChange = (event) => {
         const format = event.target.value;
-        event.preventDefault();
         setFormat(format);
         setbinVal('');
         sethexVal('');
@@ -41,7 +40,7 @@ const Home = () => {
         <div className="home">
             <div className="format">
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" checked onChange={handleChange} name="input_format" value='real' type="radio" id="real" />
+                    <input className="form-check-input" checked={format==='real'} onChange={handleChange} name="input_format" value='real' type="radio" id="real" />
                     <label className="form-check-label" htmlFor="real">Floating point</label>
                 </div>
                 <div className="form-check form-check-inline">
