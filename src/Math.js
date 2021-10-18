@@ -910,14 +910,18 @@ export function float2ieee754(input) {
 export function hex2Float(str) {
     var float = 0;
     let int = 0, multi = 1;
+    let re = /^0x[0-9a-fA-F]+$/g;
+
     str = (str.substring(0, 2) !== '0x') ? `0x${str}` : str;
+    if(str.length > 10) throw 'Value out of range';
+    if(!re.test(str)) throw "Invalid input!";
+
     if (/^0x/.exec(str)) {
         int = parseInt(str, 16);
     } else {
         for (var i = str.length - 1; i >= 0; i -= 1) {
             if (str.charCodeAt(i) > 255) {
-                console.log('Wrong string parametr');
-                return false;
+                throw 'Invalid input!'
             }
             int += str.charCodeAt(i) * multi;
             multi *= 256;
@@ -950,10 +954,11 @@ function ieeee754ToHex(s, e, m) {
 }
 
 export function convert(input, format) {
-    if (!format || !input) return;
+    if (!format || !input) throw 'Invalid input!';
     let realVal, hexVal, binVal;
     if (format == "real") {
         // input = parseFloat(input);
+        if(!(parsefloat(input))) throw 'Input entered is invalid';
         hexVal = float2Hex(input);
         binVal = float2ieee754(input);
         realVal = input;
@@ -974,13 +979,19 @@ export function convert(input, format) {
     return { 'hexVal': hexVal, 'binVal': binVal, 'realVal': realVal }
 }
 
+function parsefloat(num) {
+    let re = /^[+-]?\d+(\.\d+)?$/;
+    return re.test(num);
+}
+
 
 export function operate(val1, val2, operation, format) {
 
-    if (!format || !val1 || !val2 || !operation) return;
+    if (!format || !val1 || !val2 || !operation) throw "Invalid input!";
     let realVal, hexVal, binVal, output;
 
     if (format == "real") {
+        if(!(parsefloat(val1)) || !(parsefloat(val2))) throw 'Input entered is invalid';
         output = compute(val1, val2, operation);
     }
     else if (format == "hex") {

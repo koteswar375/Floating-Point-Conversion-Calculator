@@ -10,8 +10,8 @@ const Operations = () => {
     const [hexVal, sethexVal] = useState('');
     const [val1, setVal1] = useState('');
     const [val2, setVal2] = useState('');
-    const [iee754Val1, setiee754Val1] = useState({sign:'', exp:'', mantissa:''});
-    const [iee754Val2, setiee754Val2] = useState({sign:'', exp:'', mantissa:''});
+    const [iee754Val1, setiee754Val1] = useState({ sign: '', exp: '', mantissa: '' });
+    const [iee754Val2, setiee754Val2] = useState({ sign: '', exp: '', mantissa: '' });
 
 
     const handleChange = (event) => {
@@ -23,8 +23,8 @@ const Operations = () => {
         setVal1('')
         setVal2('')
         setOperation('')
-        setiee754Val1({sign:'', exp:'', mantissa:''});
-        setiee754Val2({sign:'', exp:'', mantissa:''});
+        setiee754Val1({ sign: '', exp: '', mantissa: '' });
+        setiee754Val2({ sign: '', exp: '', mantissa: '' });
     }
     const handleSelect = (event) => {
         const val = event.target.value;
@@ -34,14 +34,20 @@ const Operations = () => {
     const handleInput1Change = (e) => {
         setVal1(e.target.value)
     }
+    
     const submit = (event) => {
         let value1 = (format === "bin") ? `${iee754Val1.sign}|${iee754Val1.exp}|${iee754Val1.mantissa}` : val1;
         let value2 = (format === "bin") ? `${iee754Val2.sign}|${iee754Val2.exp}|${iee754Val2.mantissa}` : val2;
+        let binVal, realVal, hexVal;
+        try {
+            ({ binVal, realVal, hexVal } = operate(value1, value2, operation, format));
+            setbinVal(binVal);
+            sethexVal(hexVal);
+            setrealVal(realVal);
+        } catch (e) {
+            alert(e);
+        }
 
-        let { binVal, realVal, hexVal } = operate(value1, value2, operation, format);
-        setbinVal(binVal);
-        sethexVal(hexVal);
-        setrealVal(realVal);
         // axios.post(`${URL}/operation`, { format, val1, val2, operation })
         //     .then((res) => {
         //         const { realVal, binVal, hexVal } = res['data'];
@@ -74,22 +80,22 @@ const Operations = () => {
                 {
                     (format === 'bin') ? (
                         <div>
-                        <div className="d-flex mx-2">
-                            <input type="text" val={iee754Val1.sign} onChange={(e)=>setiee754Val1({sign:e.target.value, exp:iee754Val1.exp, mantissa:iee754Val1.mantissa})} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
-                            <input type="text" val={iee754Val1.exp} onChange={(e)=>setiee754Val1({sign:iee754Val1.sign,exp:e.target.value, mantissa:iee754Val1.mantissa})} placeholder="unbiased exponent" className="form-control mx-2" />
-                            <input type="text" val={iee754Val1.mantissa} onChange={(e)=>setiee754Val1({sign:iee754Val1.sign,exp:iee754Val1.exp,mantissa:e.target.value})} placeholder="mantissa" className="form-control" />
-                        </div>
-                        <div className="d-flex m-2">
-                            <input type="text"  val={iee754Val2.sign} onChange={(e)=>setiee754Val2({sign:e.target.value,exp:iee754Val2.exp, mantissa:iee754Val2.mantissa})} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
-                            <input type="text"  val={iee754Val2.exp} onChange={(e)=>setiee754Val2({sign:iee754Val2.sign,exp:e.target.value, mantissa:iee754Val2.mantissa})} placeholder="unbiased exponent" className="form-control mx-2" />
-                            <input type="text"  val={iee754Val2.mantissa} onChange={(e)=>setiee754Val2({sign:iee754Val2.sign,exp:iee754Val2.exp,mantissa:e.target.value})} placeholder="mantissa" className="form-control" />
-                        </div>
+                            <div className="d-flex mx-2">
+                                <input type="text" val={iee754Val1.sign} onChange={(e) => setiee754Val1({ sign: e.target.value, exp: iee754Val1.exp, mantissa: iee754Val1.mantissa })} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
+                                <input type="text" val={iee754Val1.exp} onChange={(e) => setiee754Val1({ sign: iee754Val1.sign, exp: e.target.value, mantissa: iee754Val1.mantissa })} placeholder="unbiased exponent" className="form-control mx-2" />
+                                <input type="text" val={iee754Val1.mantissa} onChange={(e) => setiee754Val1({ sign: iee754Val1.sign, exp: iee754Val1.exp, mantissa: e.target.value })} placeholder="mantissa" className="form-control" />
+                            </div>
+                            <div className="d-flex m-2">
+                                <input type="text" val={iee754Val2.sign} onChange={(e) => setiee754Val2({ sign: e.target.value, exp: iee754Val2.exp, mantissa: iee754Val2.mantissa })} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
+                                <input type="text" val={iee754Val2.exp} onChange={(e) => setiee754Val2({ sign: iee754Val2.sign, exp: e.target.value, mantissa: iee754Val2.mantissa })} placeholder="unbiased exponent" className="form-control mx-2" />
+                                <input type="text" val={iee754Val2.mantissa} onChange={(e) => setiee754Val2({ sign: iee754Val2.sign, exp: iee754Val2.exp, mantissa: e.target.value })} placeholder="mantissa" className="form-control" />
+                            </div>
                         </div>
                     ) :
-                  
-                        (<div style={{flexBasis:"40%"}}>
-                            <input onChange={handleInput1Change} type="text" value={val1}  placeholder="Enter the first value" className="form-control" />
-                            <input onChange={(e) => setVal2(e.target.value)} value={val2} type="text"  placeholder="Enter the second value" className="form-control my-2" />
+
+                        (<div style={{ flexBasis: "40%" }}>
+                            <input onChange={handleInput1Change} type="text" value={val1} placeholder="Enter the first value" className="form-control" />
+                            <input onChange={(e) => setVal2(e.target.value)} value={val2} type="text" placeholder="Enter the second value" className="form-control my-2" />
                         </div>)
                 }
                 <select onChange={handleSelect} value={operation} style={{ width: '30%' }} className="form-select mx-2" aria-label="Default select example">
@@ -117,7 +123,7 @@ const Operations = () => {
                             <input id="exponent" placeholder="exponent" className="form-control mx-2" value={binVal ? binVal['exp'] : ""} type="text" disabled />
                             <input id="mantissa" placeholder="mantissa" className="form-control" value={binVal ? binVal['mantissa'] : ''} type="text" disabled />
                         </div>
-                       
+
                         <div className="d-flex justify-content-around p-1">
                             <input id="sign bit" placeholder="sign (binary)" className="form-control" value={binVal ? binVal['sign_bit'] : ''} type="text" disabled />
                             <input id="exponent bits" placeholder="exponent (binary)" className="form-control mx-2" value={binVal ? binVal['exp_bit'] : ''} type="text" disabled />

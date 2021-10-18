@@ -29,10 +29,16 @@ const Home = () => {
 
     const submit = (event) => {
         let value = (format === "bin") ? `${sign}|${exp}|${mantissa}` : val;
-        let { binVal, realVal, hexVal } = convert(value, format);
-        setbinVal(binVal);
-        sethexVal(hexVal);
-        setrealVal(realVal);
+        let binVal, realVal, hexVal;
+        try {
+            ({ binVal, realVal, hexVal } = convert(value, format));
+            setbinVal(binVal);
+            sethexVal(hexVal);
+            setrealVal(realVal);
+        } catch (e) {
+            alert(e);
+        }
+
         // axios.post(`${URL}/conversion`, { format, value })
         //     .then((res) => {
         //         const { realVal, binVal, hexVal } = res['data'];
