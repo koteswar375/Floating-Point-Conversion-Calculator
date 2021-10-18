@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import './Operations.css';
-import URL from '../config';
-import {operate} from '../Math';
+import { operate } from '../Math';
 
 const Operations = () => {
     const [format, setFormat] = useState('real');
@@ -12,10 +11,12 @@ const Operations = () => {
     const [hexVal, sethexVal] = useState('');
     const [val1, setVal1] = useState('');
     const [val2, setVal2] = useState('');
+    const [iee754Val1, setiee754Val1] = useState({sign:'', exp:'', mantissa:''});
+    const [iee754Val2, setiee754Val2] = useState({sign:'', exp:'', mantissa:''});
+
 
     const handleChange = (event) => {
         const val = event.target.value;
-        console.log("change")
         setFormat(val);
         setbinVal('')
         sethexVal('')
@@ -23,6 +24,8 @@ const Operations = () => {
         setVal1('')
         setVal2('')
         setOperation('')
+        setiee754Val1({sign:'', exp:'', mantissa:''});
+        setiee754Val2({sign:'', exp:'', mantissa:''});
     }
     const handleSelect = (event) => {
         const val = event.target.value;
@@ -66,18 +69,36 @@ const Operations = () => {
                 </div>
             </div>
             <div className="input">
-                <div>
-                    <input onChange={handleInput1Change} type="text" value={val1} style={{ margin: '10px' }} placeholder="Enter the first value" className="form-control" />
-                    <input onChange={(e) => setVal2(e.target.value)} value={val2} type="text" style={{ margin: '10px' }} placeholder="Enter the second value" className="form-control" />
-                </div>
-                <select onChange={handleSelect} value={operation} style={{ width: '30%' }} className="form-select" aria-label="Default select example">
+                {
+                    (format === 'bin') ? (
+                        <div>
+                        <div className="d-flex mx-2">
+                            <input type="text" val={iee754Val1.sign} onChange={(e)=>setiee754Val1({sign:e.target.value})} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
+                            <input type="text" val={iee754Val1.exp} onChange={(e)=>setiee754Val1({exp:e.target.value})} placeholder="unbiased exponent" className="form-control mx-2" />
+                            <input type="text" val={iee754Val1.mantissa} onChange={(e)=>setiee754Val1({mantissa:e.target.value})} placeholder="mantissa" className="form-control" />
+                        </div>
+                        <div className="d-flex m-2">
+                            <input type="text"  val={iee754Val1.sign} onChange={(e)=>setiee754Val2({sign:e.target.value})} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
+                            <input type="text"  val={iee754Val1.exp} onChange={(e)=>setiee754Val2({exp:e.target.value})} placeholder="unbiased exponent" className="form-control mx-2" />
+                            <input type="text"  val={iee754Val1.mantissa} onChange={(e)=>setiee754Val2({mantissa:e.target.value})} placeholder="mantissa" className="form-control" />
+                        </div>
+                        </div>
+                    ) :
+                        (<div>
+                            <input onChange={handleInput1Change} type="text" value={val1}  placeholder="Enter the first value" className="form-control" />
+                            <input onChange={(e) => setVal2(e.target.value)} value={val2} type="text"  placeholder="Enter the second value" className="form-control my-2" />
+                        </div>)
+                }
+                <select onChange={handleSelect} value={operation} style={{ width: '30%' }} className="form-select mx-2" aria-label="Default select example">
                     <option defaultValue>Select Operation</option>
                     <option value="add">Addition</option>
                     <option value="subtract">Subtraction</option>
                     <option value="multiply">Multiplication</option>
                 </select>
-                <button onClick={submit} type="button" className="btn btn-primary">Submit</button>
+                <button onClick={submit} type="button" className="btn btn-success">Submit</button>
             </div>
+
+            {/* Output */}
             <div className="output">
                 <div className="outputformat form-group row">
                     <label className="col-sm-2 col-form-label" htmlFor="decimal">Floating point</label>
@@ -85,23 +106,23 @@ const Operations = () => {
                         <input id="decimal" placeholder="decimal" className="form-control " value={realVal} type="text" disabled />
                     </div>
                 </div>
-                <div className="row form-group justify-content-left p-2 align-items-center border border-info rounded">
+                <div className="row form-group justify-content-left p-2 align-items-center border border-info rounded  p-3">
                     <label className="col-sm-2 col-form-label" htmlFor="float">IEEE-754</label>
                     <div className="ieee754 col-sm-10">
                         <div className="d-flex justify-content-around p-1">
-                            <input id="sign" placeholder="sign"  className="form-control" value={binVal? ((binVal['sign_bit'] === "1") ? "-1": "+1"): ""} type="text" disabled />
-                            <input id="exponent" placeholder="exponent"  className="form-control mx-2" value={binVal? binVal['exp'] : ""} type="text" disabled />
-                            <input id="mantissa" placeholder="mantissa"  className="form-control" value={binVal?binVal['mantissa']:''} type="text" disabled />
+                            <input id="sign" placeholder="sign" className="form-control" value={binVal ? ((binVal['sign_bit'] === "1") ? "-1" : "+1") : ""} type="text" disabled />
+                            <input id="exponent" placeholder="exponent" className="form-control mx-2" value={binVal ? binVal['exp'] : ""} type="text" disabled />
+                            <input id="mantissa" placeholder="mantissa" className="form-control" value={binVal ? binVal['mantissa'] : ''} type="text" disabled />
                         </div>
                         <div className="d-flex justify-content-around p-1">
-                            <input id="sign-encode" placeholder="sign (Encoded as)"  className="form-control" value={binVal?binVal['sign_bit']:''} type="text" disabled />
-                            <input id="exponent-encode" placeholder="exponent (Encoded as)"  className="form-control mx-2" value={binVal? `${parseInt(binVal['exp'])+127}`:''} type="text" disabled />
-                            <input id="mantissa-encode" placeholder="mantissa (Encoded as)"  className="form-control" value={binVal ? `${parseInt(binVal["mantissa_bit"],2)}`:""} type="text" disabled />
+                            <input id="sign-encode" placeholder="sign (Encoded as)" className="form-control" value={binVal ? binVal['sign_bit'] : ''} type="text" disabled />
+                            <input id="exponent-encode" placeholder="exponent (Encoded as)" className="form-control mx-2" value={binVal ? `${parseInt(binVal['exp']) + 127}` : ''} type="text" disabled />
+                            <input id="mantissa-encode" placeholder="mantissa (Encoded as)" className="form-control" value={binVal ? `${parseInt(binVal["mantissa_bit"], 2)}` : ""} type="text" disabled />
                         </div>
                         <div className="d-flex justify-content-around p-1">
-                            <input id="sign bit" placeholder="sign (binary)"  className="form-control" value={binVal?binVal['sign_bit']:''} type="text" disabled />
-                            <input id="exponent bits" placeholder="exponent (binary)"  className="form-control mx-2" value={binVal?binVal['exp_bit']:''} type="text" disabled />
-                            <input id="mantissa bits" placeholder="mantissa (binary)"  className="form-control" value={binVal?binVal['mantissa_bit']:''} type="text" disabled />
+                            <input id="sign bit" placeholder="sign (binary)" className="form-control" value={binVal ? binVal['sign_bit'] : ''} type="text" disabled />
+                            <input id="exponent bits" placeholder="exponent (binary)" className="form-control mx-2" value={binVal ? binVal['exp_bit'] : ''} type="text" disabled />
+                            <input id="mantissa bits" placeholder="mantissa (binary)" className="form-control" value={binVal ? binVal['mantissa_bit'] : ''} type="text" disabled />
                         </div>
                     </div>
                 </div>

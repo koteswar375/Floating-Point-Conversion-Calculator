@@ -938,6 +938,17 @@ export function hex2ieee754(str) {
     return float2ieee754(floatVal);
 }
 
+function ieee754ToFloat(s,e,m) {
+    let sign = parseInt(s);
+    let exp = parseInt(e);
+    return Math.pow(-1,s) * m * Math.pow(2,e);
+}
+
+function ieeee754ToHex(s,e,m) {
+    let float = ieee754ToFloat(s,e,m);
+    return float2Hex(float);
+}
+
 export function convert(input, format) {
     if (!format || !input) return;
     let realVal, hexVal, binVal;
@@ -953,9 +964,11 @@ export function convert(input, format) {
         binVal = hex2ieee754(input);
     }
     else if (format == "bin") {
-        // binVal = input
-        // realVal = float2real(input)
-        // hexVal = float2hex(input)
+        let parts = input.split("|");
+        let s=parts[0], e=parts[1], m=parts[2];
+        hexVal = ieeee754ToHex(s,e,m);
+        realVal = ieee754ToFloat(s,e,m);
+        binVal = float2ieee754(realVal);
     }
 
     return { 'hexVal': hexVal, 'binVal': binVal, 'realVal': realVal }
