@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import './Operations.css';
 import URL from '../config';
-import compute from '../Math';
+import {operate} from '../Math';
 
 const Operations = () => {
     const [format, setFormat] = useState('real');
@@ -15,33 +15,45 @@ const Operations = () => {
 
     const handleChange = (event) => {
         const val = event.target.value;
+        console.log("change")
         setFormat(val);
         setbinVal('')
         sethexVal('')
         setrealVal('')
+        setVal1('')
+        setVal2('')
+        setOperation('')
     }
-    const handleSelect = (event)=> {
+    const handleSelect = (event) => {
         const val = event.target.value;
         setOperation(val);
     }
+
+    const handleInput1Change = (e) => {
+        setVal1(e.target.value)
+    }
     const submit = (event) => {
-            axios.post(`${URL}/operation`, { format, val1, val2, operation })
-                .then((res) => {
-                    const { realVal, binVal, hexVal } = res['data'];
-                    setbinVal(binVal)
-                    sethexVal(hexVal)
-                    setrealVal(realVal)
-                })
-                .catch((error) => {
-                    console.log(error)
-                    alert("Invalid inputs")
-                })
+        let { binVal, realVal, hexVal } = operate(val1, val2, operation, format);
+        setbinVal(binVal);
+        sethexVal(hexVal);
+        setrealVal(realVal);
+        // axios.post(`${URL}/operation`, { format, val1, val2, operation })
+        //     .then((res) => {
+        //         const { realVal, binVal, hexVal } = res['data'];
+        //         setbinVal(binVal)
+        //         sethexVal(hexVal)
+        //         setrealVal(realVal)
+        //     })
+        //     .catch((error) => {
+        //         console.log(error)
+        //         alert("Invalid inputs")
+        //     })
     }
     return (
         <div className="container">
             <div className="format">
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" checked={format==="real"} onChange={handleChange} name="input_format1" value='real' type="radio" id="real" />
+                    <input className="form-check-input" checked={format === "real"} onChange={handleChange} name="input_format1" value='real' type="radio" id="real" />
                     <label className="form-check-label" htmlFor="real">Floating point</label>
                 </div>
                 <div className="form-check form-check-inline">
@@ -55,10 +67,10 @@ const Operations = () => {
             </div>
             <div className="input">
                 <div>
-                    <input onChange= {(e)=>setVal1(e.target.value)} type="text" style={{ margin: '10px' }} placeholder="Enter the first value" className="form-control" />
-                    <input onChange= {(e)=>setVal2(e.target.value)} type="text" style={{ margin: '10px' }} placeholder="Enter the second value" className="form-control" />
+                    <input onChange={handleInput1Change} type="text" value={val1} style={{ margin: '10px' }} placeholder="Enter the first value" className="form-control" />
+                    <input onChange={(e) => setVal2(e.target.value)} value={val2} type="text" style={{ margin: '10px' }} placeholder="Enter the second value" className="form-control" />
                 </div>
-                <select onChange= {handleSelect} value={operation} style={{ width:'30%'}} className="form-select" aria-label="Default select example">
+                <select onChange={handleSelect} value={operation} style={{ width: '30%' }} className="form-select" aria-label="Default select example">
                     <option defaultValue>Select Operation</option>
                     <option value="add">Addition</option>
                     <option value="subtract">Subtraction</option>
@@ -74,22 +86,22 @@ const Operations = () => {
                     </div>
                 </div>
                 <div className="row form-group justify-content-left p-2 align-items-center border border-info rounded">
-                    <label className="col-sm-2 col-form-label" htmlFor="float">IEE754</label>
+                    <label className="col-sm-2 col-form-label" htmlFor="float">IEEE-754</label>
                     <div className="ieee754 col-sm-10">
                         <div className="d-flex justify-content-around p-1">
-                            <input id="sign" placeholder="sign"  className="form-control" value={binVal? ((binVal['sign'] === "1") ? "-1": "+1"): ""} type="text" disabled />
-                            <input id="exponent" placeholder="exponent"  className="form-control mx-2" value={binVal? `${parseInt(binVal['exp_e']) - 127}` : ""} type="text" disabled />
-                            <input id="mantissa" placeholder="mantissa"  className="form-control" value={binVal?binVal['mantissa_e']:''} type="text" disabled />
+                            <input id="sign" placeholder="sign"  className="form-control" value={binVal? ((binVal['sign_bit'] === "1") ? "-1": "+1"): ""} type="text" disabled />
+                            <input id="exponent" placeholder="exponent"  className="form-control mx-2" value={binVal? binVal['exp'] : ""} type="text" disabled />
+                            <input id="mantissa" placeholder="mantissa"  className="form-control" value={binVal?binVal['mantissa']:''} type="text" disabled />
                         </div>
                         <div className="d-flex justify-content-around p-1">
-                            <input id="sign-encode" placeholder="sign (Encoded as)"  className="form-control" value={binVal?binVal['sign']:''} type="text" disabled />
-                            <input id="exponent-encode" placeholder="exponent (Encoded as)"  className="form-control mx-2" value={binVal?binVal['exp_e']:''} type="text" disabled />
-                            <input id="mantissa-encode" placeholder="mantissa (Encoded as)"  className="form-control" value={binVal ? binVal["mantissa_int"]:""} type="text" disabled />
+                            <input id="sign-encode" placeholder="sign (Encoded as)"  className="form-control" value={binVal?binVal['sign_bit']:''} type="text" disabled />
+                            <input id="exponent-encode" placeholder="exponent (Encoded as)"  className="form-control mx-2" value={binVal? `${parseInt(binVal['exp'])+127}`:''} type="text" disabled />
+                            <input id="mantissa-encode" placeholder="mantissa (Encoded as)"  className="form-control" value={binVal ? `${parseInt(binVal["mantissa_bit"],2)}`:""} type="text" disabled />
                         </div>
                         <div className="d-flex justify-content-around p-1">
-                            <input id="sign bit" placeholder="sign (binary)"  className="form-control" value={binVal?binVal['sign']:''} type="text" disabled />
-                            <input id="exponent bits" placeholder="exponent (binary)"  className="form-control mx-2" value={binVal?binVal['exp']:''} type="text" disabled />
-                            <input id="mantissa bits" placeholder="mantissa (binary)"  className="form-control" value={binVal?binVal['mantissa']:''} type="text" disabled />
+                            <input id="sign bit" placeholder="sign (binary)"  className="form-control" value={binVal?binVal['sign_bit']:''} type="text" disabled />
+                            <input id="exponent bits" placeholder="exponent (binary)"  className="form-control mx-2" value={binVal?binVal['exp_bit']:''} type="text" disabled />
+                            <input id="mantissa bits" placeholder="mantissa (binary)"  className="form-control" value={binVal?binVal['mantissa_bit']:''} type="text" disabled />
                         </div>
                     </div>
                 </div>

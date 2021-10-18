@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import './Home.css';
 import URL from '../config';
-import compute from '../Math';
+import {convert} from '../Math';
 
 
 const Home = () => {
@@ -24,18 +24,21 @@ const Home = () => {
     const handleEnter = (event) => {
         if (event.key === 'Enter') {
             const value = event.target.value;
-            compute(value,true)
-            axios.post(`${URL}/conversion`, { format, value })
-                .then((res) => {
-                    const { realVal, binVal, hexVal } = res['data'];
-                    setbinVal(binVal)
-                    sethexVal(hexVal)
-                    setrealVal(realVal)
-                })
-                .catch((error) => {
-                    console.log(error)
-                    alert("Invalid inputs")
-                })
+            let {binVal, realVal, hexVal} = convert(value,format);
+            setbinVal(binVal);
+            sethexVal(hexVal);
+            setrealVal(realVal);
+            // axios.post(`${URL}/conversion`, { format, value })
+            //     .then((res) => {
+            //         const { realVal, binVal, hexVal } = res['data'];
+            //         // setbinVal(binVal)
+            //         sethexVal(hexVal)
+            //         setrealVal(realVal)
+            //     })
+            //     .catch((error) => {
+            //         console.log(error)
+            //         alert("Invalid inputs")
+            //     })
         }
     }
     return (
@@ -66,19 +69,19 @@ const Home = () => {
                     <label className="col-sm-2 col-form-label" htmlFor="float">IEEE-754</label>
                     <div className="ieee754 col-sm-10">
                         <div className="d-flex justify-content-around p-1">
-                            <input id="sign" placeholder="sign"  className="form-control" value={binVal? ((binVal['sign'] === "1") ? "-1": "+1"): ""} type="text" disabled />
-                            <input id="exponent" placeholder="exponent"  className="form-control mx-2" value={binVal? `${parseInt(binVal['exp_e']) - 127}` : ""} type="text" disabled />
-                            <input id="mantissa" placeholder="mantissa"  className="form-control" value={binVal?binVal['mantissa_e']:''} type="text" disabled />
+                            <input id="sign" placeholder="sign"  className="form-control" value={binVal? ((binVal['sign_bit'] === "1") ? "-1": "+1"): ""} type="text" disabled />
+                            <input id="exponent" placeholder="exponent"  className="form-control mx-2" value={binVal? binVal['exp'] : ""} type="text" disabled />
+                            <input id="mantissa" placeholder="mantissa"  className="form-control" value={binVal?binVal['mantissa']:''} type="text" disabled />
                         </div>
                         <div className="d-flex justify-content-around p-1">
-                            <input id="sign-encode" placeholder="sign (Encoded as)"  className="form-control" value={binVal?binVal['sign']:''} type="text" disabled />
-                            <input id="exponent-encode" placeholder="exponent (Encoded as)"  className="form-control mx-2" value={binVal?binVal['exp_e']:''} type="text" disabled />
-                            <input id="mantissa-encode" placeholder="mantissa (Encoded as)"  className="form-control" value={binVal ? binVal["mantissa_int"]:""} type="text" disabled />
+                            <input id="sign-encode" placeholder="sign (Encoded as)"  className="form-control" value={binVal?binVal['sign_bit']:''} type="text" disabled />
+                            <input id="exponent-encode" placeholder="exponent (Encoded as)"  className="form-control mx-2" value={binVal? `${parseInt(binVal['exp'])+127}`:''} type="text" disabled />
+                            <input id="mantissa-encode" placeholder="mantissa (Encoded as)"  className="form-control" value={binVal ? `${parseInt(binVal["mantissa_bit"],2)}`:""} type="text" disabled />
                         </div>
                         <div className="d-flex justify-content-around p-1">
-                            <input id="sign bit" placeholder="sign (binary)"  className="form-control" value={binVal?binVal['sign']:''} type="text" disabled />
-                            <input id="exponent bits" placeholder="exponent (binary)"  className="form-control mx-2" value={binVal?binVal['exp']:''} type="text" disabled />
-                            <input id="mantissa bits" placeholder="mantissa (binary)"  className="form-control" value={binVal?binVal['mantissa']:''} type="text" disabled />
+                            <input id="sign bit" placeholder="sign (binary)"  className="form-control" value={binVal?binVal['sign_bit']:''} type="text" disabled />
+                            <input id="exponent bits" placeholder="exponent (binary)"  className="form-control mx-2" value={binVal?binVal['exp_bit']:''} type="text" disabled />
+                            <input id="mantissa bits" placeholder="mantissa (binary)"  className="form-control" value={binVal?binVal['mantissa_bit']:''} type="text" disabled />
                         </div>
                     </div>
                 </div>
