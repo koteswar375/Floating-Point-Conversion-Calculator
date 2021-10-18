@@ -2,6 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import './Home.css';
 import URL from '../config';
+import compute from '../Math';
+
 
 const Home = () => {
     const [format, setFormat] = useState('real');
@@ -21,8 +23,8 @@ const Home = () => {
     }
     const handleEnter = (event) => {
         if (event.key === 'Enter') {
-            console.log("keypress")
             const value = event.target.value;
+            compute(value,true)
             axios.post(`${URL}/conversion`, { format, value })
                 .then((res) => {
                     const { realVal, binVal, hexVal } = res['data'];
@@ -41,28 +43,28 @@ const Home = () => {
             <div className="format">
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" checked={format==='real'} onChange={handleChange} name="input_format" value='real' type="radio" id="real" />
-                    <label className="form-check-label" htmlFor="real">Floating point</label>
+                    <label className="form-check-label" htmlFor="real">Float</label>
                 </div>
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" onChange={handleChange} name="input_format" value='bin' type="radio" id="bin" />
-                    <label className="form-check-label" htmlFor="bin">IEE754</label>
+                    <label className="form-check-label" htmlFor="bin">IEEE-754</label>
                 </div>
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" onChange={handleChange} name="input_format" value='hex' type="radio" id="hex" />
-                    <label className="form-check-label" htmlFor="hex">HexaDecimal</label>
+                    <label className="form-check-label" htmlFor="hex">Hex</label>
                 </div>
             </div>
             <input type="text" value={val} onChange={(e) => setVal(e.target.value)} style={{ width: '30%', margin: '10px' }} placeholder="Enter the input" className="form-control" onKeyPress={handleEnter} />
             <div className="output">
                 <div className="outputformat form-group row">
-                    <label className="col-sm-2 col-form-label" htmlFor="decimal">Floating point</label>
+                    <label className="col-sm-2 col-form-label" htmlFor="decimal">Float</label>
                     <div className="col-sm-8">
                         <input id="decimal" placeholder="decimal" className="form-control " value={realVal} type="text" disabled />
                     </div>
                 </div>
                 <div className="row form-group justify-content-left p-2 align-items-center border border-info rounded">
-                    <label className="col-sm-2 col-form-label" htmlFor="float">IEE754</label>
-                    <div className="ieee754 col-sm-8">
+                    <label className="col-sm-2 col-form-label" htmlFor="float">IEEE-754</label>
+                    <div className="ieee754 col-sm-10">
                         <div className="d-flex justify-content-around p-1">
                             <input id="sign" placeholder="sign"  className="form-control" value={binVal? ((binVal['sign'] === "1") ? "-1": "+1"): ""} type="text" disabled />
                             <input id="exponent" placeholder="exponent"  className="form-control mx-2" value={binVal? `${parseInt(binVal['exp_e']) - 127}` : ""} type="text" disabled />
@@ -81,7 +83,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="outputformat form-group row">
-                    <label className="col-sm-2 col-form-label" htmlFor="hex">Hexadecimal</label>
+                    <label className="col-sm-2 col-form-label" htmlFor="hex">Hex</label>
                     <div className="col-sm-8">
                         <input id="hex" placeholder="hexadecimal" className="form-control" value={hexVal} type="text" disabled />
                     </div>

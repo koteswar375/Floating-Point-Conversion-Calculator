@@ -108,8 +108,9 @@ def real2floatingPoint(real_no):
  
     real_no = abs(real_no)
     int_str = bin(int(real_no))[2 : ]
+    print(int_str)
     fraction_str = __binaryOfFraction__(real_no - int(real_no))
- 
+    
     ind = int_str.index('1')
     exp_str = bin((len(int_str) - ind - 1) + 127)[2 : ]
     mant_str = int_str[ind + 1 : ] + fraction_str

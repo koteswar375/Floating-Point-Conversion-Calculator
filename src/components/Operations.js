@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import './Operations.css';
 import URL from '../config';
-
+import compute from '../Math';
 
 const Operations = () => {
     const [format, setFormat] = useState('real');
@@ -75,7 +75,7 @@ const Operations = () => {
                 </div>
                 <div className="row form-group justify-content-left p-2 align-items-center border border-info rounded">
                     <label className="col-sm-2 col-form-label" htmlFor="float">IEE754</label>
-                    <div className="ieee754 col-sm-8">
+                    <div className="ieee754 col-sm-10">
                         <div className="d-flex justify-content-around p-1">
                             <input id="sign" placeholder="sign"  className="form-control" value={binVal? ((binVal['sign'] === "1") ? "-1": "+1"): ""} type="text" disabled />
                             <input id="exponent" placeholder="exponent"  className="form-control mx-2" value={binVal? `${parseInt(binVal['exp_e']) - 127}` : ""} type="text" disabled />
