@@ -938,14 +938,14 @@ export function hex2ieee754(str) {
     return float2ieee754(floatVal);
 }
 
-function ieee754ToFloat(s,e,m) {
+function ieee754ToFloat(s, e, m) {
     let sign = parseInt(s);
     let exp = parseInt(e);
-    return Math.pow(-1,s) * m * Math.pow(2,e);
+    return Math.pow(-1, s) * m * Math.pow(2, e);
 }
 
-function ieeee754ToHex(s,e,m) {
-    let float = ieee754ToFloat(s,e,m);
+function ieeee754ToHex(s, e, m) {
+    let float = ieee754ToFloat(s, e, m);
     return float2Hex(float);
 }
 
@@ -965,9 +965,9 @@ export function convert(input, format) {
     }
     else if (format == "bin") {
         let parts = input.split("|");
-        let s=parts[0], e=parts[1], m=parts[2];
-        hexVal = ieeee754ToHex(s,e,m);
-        realVal = ieee754ToFloat(s,e,m);
+        let s = parts[0], e = parts[1], m = parts[2];
+        hexVal = ieeee754ToHex(s, e, m);
+        realVal = ieee754ToFloat(s, e, m);
         binVal = float2ieee754(realVal);
     }
 
@@ -978,34 +978,30 @@ export function convert(input, format) {
 export function operate(val1, val2, operation, format) {
 
     if (!format || !val1 || !val2 || !operation) return;
-    let realVal, hexVal, binVal;
+    let realVal, hexVal, binVal, output;
+
     if (format == "real") {
-        let output = compute(val1, val2, operation)
-        hexVal = float2Hex(output);
-        binVal = float2ieee754(output);
-        realVal = output;
+        output = compute(val1, val2, operation);
     }
     else if (format == "hex") {
-        val1 = hex2Float(val1)
-        val2 = hex2Float(val2)
-        let output = compute(val1, val2, operation)
-        hexVal = float2Hex(output);
-        binVal = float2ieee754(output);
-        realVal = output
+        val1 = hex2Float(val1);
+        val2 = hex2Float(val2);
+        output = compute(val1, val2, operation);
     }
     else if (format == "bin") {
-        // val1 = float2real(val1)
-        // val2 = float2real(val2)
-        // output = operate(val1, val2, operation)
-        // hexVal = real2hex(output)
-        // binaryString = real2floatingPoint(output)
-        // sign, exp, mantissa = binaryString.split(" | ")
-        // binVal = {
-        //     "sign": sign, "exp": exp, "mantissa": mantissa, "sign_e": sign, "exp_e": int(exp, 2),
-        //     "mantissa_e": convertToInt(mantissa), "mantissa_int": int(mantissa, 2)
-        // }
-        // realVal = output
+        let parts1 = val1.split("|");
+        let parts2 = val2.split("|");
+        let s1 = parts1[0], e1 = parts1[1], m1 = parts1[2];
+        let s2 = parts2[0], e2 = parts2[1], m2 = parts2[2];
+        let floatVal1 = ieee754ToFloat(s1, e1, m1);
+        let floatVal2 = ieee754ToFloat(s2, e2, m2);
+
+        output = compute(floatVal1, floatVal2, operation);
     }
+
+    hexVal = float2Hex(output);
+    binVal = float2ieee754(output);
+    realVal = output;
     return { 'hexVal': hexVal, 'binVal': binVal, 'realVal': realVal }
 
 }

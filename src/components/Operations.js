@@ -36,7 +36,10 @@ const Operations = () => {
         setVal1(e.target.value)
     }
     const submit = (event) => {
-        let { binVal, realVal, hexVal } = operate(val1, val2, operation, format);
+        let value1 = (format === "bin") ? `${iee754Val1.sign}|${iee754Val1.exp}|${iee754Val1.mantissa}` : val1;
+        let value2 = (format === "bin") ? `${iee754Val2.sign}|${iee754Val2.exp}|${iee754Val2.mantissa}` : val2;
+
+        let { binVal, realVal, hexVal } = operate(value1, value2, operation, format);
         setbinVal(binVal);
         sethexVal(hexVal);
         setrealVal(realVal);
@@ -73,18 +76,18 @@ const Operations = () => {
                     (format === 'bin') ? (
                         <div>
                         <div className="d-flex mx-2">
-                            <input type="text" val={iee754Val1.sign} onChange={(e)=>setiee754Val1({sign:e.target.value})} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
-                            <input type="text" val={iee754Val1.exp} onChange={(e)=>setiee754Val1({exp:e.target.value})} placeholder="unbiased exponent" className="form-control mx-2" />
-                            <input type="text" val={iee754Val1.mantissa} onChange={(e)=>setiee754Val1({mantissa:e.target.value})} placeholder="mantissa" className="form-control" />
+                            <input type="text" val={iee754Val1.sign} onChange={(e)=>setiee754Val1({sign:e.target.value, exp:iee754Val1.exp, mantissa:iee754Val1.mantissa})} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
+                            <input type="text" val={iee754Val1.exp} onChange={(e)=>setiee754Val1({sign:iee754Val1.sign,exp:e.target.value, mantissa:iee754Val1.mantissa})} placeholder="unbiased exponent" className="form-control mx-2" />
+                            <input type="text" val={iee754Val1.mantissa} onChange={(e)=>setiee754Val1({sign:iee754Val1.sign,exp:iee754Val1.exp,mantissa:e.target.value})} placeholder="mantissa" className="form-control" />
                         </div>
                         <div className="d-flex m-2">
-                            <input type="text"  val={iee754Val1.sign} onChange={(e)=>setiee754Val2({sign:e.target.value})} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
-                            <input type="text"  val={iee754Val1.exp} onChange={(e)=>setiee754Val2({exp:e.target.value})} placeholder="unbiased exponent" className="form-control mx-2" />
-                            <input type="text"  val={iee754Val1.mantissa} onChange={(e)=>setiee754Val2({mantissa:e.target.value})} placeholder="mantissa" className="form-control" />
+                            <input type="text"  val={iee754Val2.sign} onChange={(e)=>setiee754Val2({sign:e.target.value,exp:iee754Val2.exp, mantissa:iee754Val2.mantissa})} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
+                            <input type="text"  val={iee754Val2.exp} onChange={(e)=>setiee754Val2({sign:iee754Val2.sign,exp:e.target.value, mantissa:iee754Val2.mantissa})} placeholder="unbiased exponent" className="form-control mx-2" />
+                            <input type="text"  val={iee754Val2.mantissa} onChange={(e)=>setiee754Val2({sign:iee754Val2.sign,exp:iee754Val2.exp,mantissa:e.target.value})} placeholder="mantissa" className="form-control" />
                         </div>
                         </div>
                     ) :
-                        (<div>
+                        (<div style={{flexBasis:"40%"}}>
                             <input onChange={handleInput1Change} type="text" value={val1}  placeholder="Enter the first value" className="form-control" />
                             <input onChange={(e) => setVal2(e.target.value)} value={val2} type="text"  placeholder="Enter the second value" className="form-control my-2" />
                         </div>)
