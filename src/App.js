@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react'
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -11,6 +12,10 @@ import Operations from './components/Operations';
 
 
 function App() {
+  useEffect(() => {
+    document.title = "IEEE 754 Converter"
+  }, [])
+
   return (
     <Router>
       <div className="App">
