@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import axios from 'axios';
 import './Operations.css';
 import { operate } from '../Math';
 
@@ -60,7 +59,7 @@ const Operations = () => {
             <div className="format">
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" checked={format === "real"} onChange={handleChange} name="input_format1" value='real' type="radio" id="real" />
-                    <label className="form-check-label" htmlFor="real">Floating point</label>
+                    <label className="form-check-label" htmlFor="real">Float</label>
                 </div>
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" onChange={handleChange} name="input_format1" value='bin' type="radio" id="bin" />
@@ -68,7 +67,7 @@ const Operations = () => {
                 </div>
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" onChange={handleChange} name="input_format1" value='hex' type="radio" id="hex" />
-                    <label className="form-check-label" htmlFor="hex">HexaDecimal</label>
+                    <label className="form-check-label" htmlFor="hex">Hex</label>
                 </div>
             </div>
             <div className="input">
@@ -87,6 +86,7 @@ const Operations = () => {
                         </div>
                         </div>
                     ) :
+                  
                         (<div style={{flexBasis:"40%"}}>
                             <input onChange={handleInput1Change} type="text" value={val1}  placeholder="Enter the first value" className="form-control" />
                             <input onChange={(e) => setVal2(e.target.value)} value={val2} type="text"  placeholder="Enter the second value" className="form-control my-2" />
@@ -104,7 +104,7 @@ const Operations = () => {
             {/* Output */}
             <div className="output">
                 <div className="outputformat form-group row">
-                    <label className="col-sm-2 col-form-label" htmlFor="decimal">Floating point</label>
+                    <label className="col-sm-2 col-form-label" htmlFor="decimal">Float</label>
                     <div className="col-sm-8">
                         <input id="decimal" placeholder="decimal" className="form-control " value={realVal} type="text" disabled />
                     </div>
@@ -117,20 +117,21 @@ const Operations = () => {
                             <input id="exponent" placeholder="exponent" className="form-control mx-2" value={binVal ? binVal['exp'] : ""} type="text" disabled />
                             <input id="mantissa" placeholder="mantissa" className="form-control" value={binVal ? binVal['mantissa'] : ''} type="text" disabled />
                         </div>
-                        <div className="d-flex justify-content-around p-1">
-                            <input id="sign-encode" placeholder="sign (Encoded as)" className="form-control" value={binVal ? binVal['sign_bit'] : ''} type="text" disabled />
-                            <input id="exponent-encode" placeholder="exponent (Encoded as)" className="form-control mx-2" value={binVal ? `${parseInt(binVal['exp']) + 127}` : ''} type="text" disabled />
-                            <input id="mantissa-encode" placeholder="mantissa (Encoded as)" className="form-control" value={binVal ? `${parseInt(binVal["mantissa_bit"], 2)}` : ""} type="text" disabled />
-                        </div>
+                       
                         <div className="d-flex justify-content-around p-1">
                             <input id="sign bit" placeholder="sign (binary)" className="form-control" value={binVal ? binVal['sign_bit'] : ''} type="text" disabled />
                             <input id="exponent bits" placeholder="exponent (binary)" className="form-control mx-2" value={binVal ? binVal['exp_bit'] : ''} type="text" disabled />
                             <input id="mantissa bits" placeholder="mantissa (binary)" className="form-control" value={binVal ? binVal['mantissa_bit'] : ''} type="text" disabled />
                         </div>
+                        <div className="d-flex justify-content-around p-1">
+                            <input id="sign-encode" placeholder="sign (Encoded as)" className="form-control" value={binVal ? binVal['sign_bit'] : ''} type="text" disabled />
+                            <input id="exponent-encode" placeholder="exponent (Encoded as)" className="form-control mx-2" value={binVal ? `${parseInt(binVal['exp']) + 127}` : ''} type="text" disabled />
+                            <input id="mantissa-encode" placeholder="mantissa (Encoded as)" className="form-control" value={binVal ? `${parseInt(binVal["mantissa_bit"], 2)}` : ""} type="text" disabled />
+                        </div>
                     </div>
                 </div>
                 <div className="outputformat form-group row">
-                    <label className="col-sm-2 col-form-label" htmlFor="hex">Hexadecimal</label>
+                    <label className="col-sm-2 col-form-label" htmlFor="hex">Hex</label>
                     <div className="col-sm-8">
                         <input id="hex" placeholder="hexadecimal" className="form-control" value={hexVal} type="text" disabled />
                     </div>
