@@ -37,6 +37,9 @@ const Home = () => {
             setrealVal(realVal);
         } catch (e) {
             alert(e);
+            setbinVal('');
+            sethexVal('');
+            setrealVal('');
         }
 
         // axios.post(`${URL}/conversion`, { format, value })
@@ -53,6 +56,10 @@ const Home = () => {
     }
     return (
         <div className="home">
+            <div className="border border-info p-2 mb-2">
+                (-1)<sup>sign  </sup> (1 + fraction) x 2 <sup>exponent - bias</sup>
+            </div>
+            
             <div className="format">
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" checked={format === 'real'} onChange={handleChange} name="input_format" value='real' type="radio" id="real" />
@@ -74,8 +81,8 @@ const Home = () => {
                     (format === 'bin') ? (
                         <div className="d-flex">
                             <input type="text" onChange={(e) => setSign(e.target.value)} value={sign} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
-                            <input type="text" onChange={(e) => setExp(e.target.value)} value={exp} placeholder="exponent" className="form-control mx-2" />
-                            <input type="text" onChange={(e) => setMantissa(e.target.value)} value={mantissa} placeholder="mantissa" className="form-control" />
+                            <input type="text" onChange={(e) => setExp(e.target.value)} value={exp} placeholder="exponent(0-255)" className="form-control mx-2" />
+                            <input type="text" onChange={(e) => setMantissa(e.target.value)} value={mantissa} placeholder="fraction(0-1)" className="form-control" />
                         </div>
                     ) :
                         (<input type="text" value={val} onChange={(e) => setVal(e.target.value)} style={{ width: '30%' }} placeholder="Enter a value"
@@ -96,8 +103,8 @@ const Home = () => {
                     <div className="ieee754 col-sm-10">
                         <div className="d-flex justify-content-around p-1">
                             <input id="sign" placeholder="sign" className="form-control" value={binVal ? ((binVal['sign_bit'] === "1") ? "-1" : "+1") : ""} type="text" disabled />
-                            <input id="exponent" placeholder="exponent" className="form-control mx-2" value={binVal ? binVal['exp'] : ""} type="text" disabled />
-                            <input id="mantissa" placeholder="mantissa" className="form-control" value={binVal ? binVal['mantissa'] : ''} type="text" disabled />
+                            <input id="exponent" placeholder="biased exponent (exp-127)" className="form-control mx-2" value={binVal ? binVal['exp'] : ""} type="text" disabled />
+                            <input id="mantissa" placeholder="(1+fraction)" className="form-control" value={binVal ? binVal['mantissa'] : ''} type="text" disabled />
                         </div>
                         <div className="d-flex justify-content-around p-1">
                             <input id="sign bit" placeholder="sign (binary)" className="form-control" value={binVal ? binVal['sign_bit'] : ''} type="text" disabled />

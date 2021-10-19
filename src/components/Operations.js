@@ -34,7 +34,7 @@ const Operations = () => {
     const handleInput1Change = (e) => {
         setVal1(e.target.value)
     }
-    
+
     const submit = (event) => {
         let value1 = (format === "bin") ? `${iee754Val1.sign}|${iee754Val1.exp}|${iee754Val1.mantissa}` : val1;
         let value2 = (format === "bin") ? `${iee754Val2.sign}|${iee754Val2.exp}|${iee754Val2.mantissa}` : val2;
@@ -46,6 +46,9 @@ const Operations = () => {
             setrealVal(realVal);
         } catch (e) {
             alert(e);
+            setbinVal('')
+            sethexVal('')
+            setrealVal('')
         }
 
         // axios.post(`${URL}/operation`, { format, val1, val2, operation })
@@ -62,6 +65,9 @@ const Operations = () => {
     }
     return (
         <div className="container">
+            <div className="border border-info p-2 mb-2">
+                (-1)<sup>sign  </sup> (1 + fraction) x 2 <sup>exponent - bias</sup>
+            </div>
             <div className="format">
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" checked={format === "real"} onChange={handleChange} name="input_format1" value='real' type="radio" id="real" />
@@ -82,13 +88,13 @@ const Operations = () => {
                         <div>
                             <div className="d-flex mx-2">
                                 <input type="text" val={iee754Val1.sign} onChange={(e) => setiee754Val1({ sign: e.target.value, exp: iee754Val1.exp, mantissa: iee754Val1.mantissa })} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
-                                <input type="text" val={iee754Val1.exp} onChange={(e) => setiee754Val1({ sign: iee754Val1.sign, exp: e.target.value, mantissa: iee754Val1.mantissa })} placeholder="unbiased exponent" className="form-control mx-2" />
-                                <input type="text" val={iee754Val1.mantissa} onChange={(e) => setiee754Val1({ sign: iee754Val1.sign, exp: iee754Val1.exp, mantissa: e.target.value })} placeholder="mantissa" className="form-control" />
+                                <input type="text" val={iee754Val1.exp} onChange={(e) => setiee754Val1({ sign: iee754Val1.sign, exp: e.target.value, mantissa: iee754Val1.mantissa })} placeholder="exponent(0-255)" className="form-control mx-2" />
+                                <input type="text" val={iee754Val1.mantissa} onChange={(e) => setiee754Val1({ sign: iee754Val1.sign, exp: iee754Val1.exp, mantissa: e.target.value })} placeholder="fraction(0-1)" className="form-control" />
                             </div>
                             <div className="d-flex m-2">
                                 <input type="text" val={iee754Val2.sign} onChange={(e) => setiee754Val2({ sign: e.target.value, exp: iee754Val2.exp, mantissa: iee754Val2.mantissa })} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
-                                <input type="text" val={iee754Val2.exp} onChange={(e) => setiee754Val2({ sign: iee754Val2.sign, exp: e.target.value, mantissa: iee754Val2.mantissa })} placeholder="unbiased exponent" className="form-control mx-2" />
-                                <input type="text" val={iee754Val2.mantissa} onChange={(e) => setiee754Val2({ sign: iee754Val2.sign, exp: iee754Val2.exp, mantissa: e.target.value })} placeholder="mantissa" className="form-control" />
+                                <input type="text" val={iee754Val2.exp} onChange={(e) => setiee754Val2({ sign: iee754Val2.sign, exp: e.target.value, mantissa: iee754Val2.mantissa })} placeholder="exponent(0-255)" className="form-control mx-2" />
+                                <input type="text" val={iee754Val2.mantissa} onChange={(e) => setiee754Val2({ sign: iee754Val2.sign, exp: iee754Val2.exp, mantissa: e.target.value })} placeholder="fraction(0-1)" className="form-control" />
                             </div>
                         </div>
                     ) :
@@ -120,8 +126,8 @@ const Operations = () => {
                     <div className="ieee754 col-sm-10">
                         <div className="d-flex justify-content-around p-1">
                             <input id="sign" placeholder="sign" className="form-control" value={binVal ? ((binVal['sign_bit'] === "1") ? "-1" : "+1") : ""} type="text" disabled />
-                            <input id="exponent" placeholder="exponent" className="form-control mx-2" value={binVal ? binVal['exp'] : ""} type="text" disabled />
-                            <input id="mantissa" placeholder="mantissa" className="form-control" value={binVal ? binVal['mantissa'] : ''} type="text" disabled />
+                            <input id="exponent" placeholder="biased exponent (exp-127)(exponent-127)" className="form-control mx-2" value={binVal ? binVal['exp'] : ""} type="text" disabled />
+                            <input id="mantissa" placeholder="(1+fraction)" className="form-control" value={binVal ? binVal['mantissa'] : ''} type="text" disabled />
                         </div>
 
                         <div className="d-flex justify-content-around p-1">

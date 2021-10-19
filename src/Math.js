@@ -913,8 +913,8 @@ export function hex2Float(str) {
     let re = /^0x[0-9a-fA-F]+$/g;
 
     str = (str.substring(0, 2) !== '0x') ? `0x${str}` : str;
-    if(str.length > 10) throw 'Value out of range';
-    if(!re.test(str)) throw "Invalid input!";
+    if (str.length > 10) throw 'Value out of range';
+    if (!re.test(str)) throw "Invalid input!";
 
     if (/^0x/.exec(str)) {
         int = parseInt(str, 16);
@@ -945,10 +945,13 @@ export function hex2ieee754(str) {
 function ieee754ToFloat(s, e, m) {
     let sign = parseInt(s);
     let exp = parseInt(e);
-    return Math.pow(-1, s) * m * Math.pow(2, e);
+    let f = parseFloat(m);
+    if (exp == 0 && f == 0) return 0;
+    return Math.pow(-1, sign) * (1+f) * Math.pow(2, exp - 127);
 }
 
 function ieeee754ToHex(s, e, m) {
+    // validateiee754(s,e,m)
     let float = ieee754ToFloat(s, e, m);
     return float2Hex(float);
 }
@@ -958,7 +961,7 @@ export function convert(input, format) {
     let realVal, hexVal, binVal;
     if (format == "real") {
         // input = parseFloat(input);
-        if(!(parsefloat(input))) throw 'Input entered is invalid';
+        if (!(parsefloat(input))) throw 'Input entered is invalid';
         hexVal = float2Hex(input);
         binVal = float2ieee754(input);
         realVal = input;
@@ -971,12 +974,43 @@ export function convert(input, format) {
     else if (format == "bin") {
         let parts = input.split("|");
         let s = parts[0], e = parts[1], m = parts[2];
+        validateiee754(s, e, m)
         hexVal = ieeee754ToHex(s, e, m);
         realVal = ieee754ToFloat(s, e, m);
         binVal = float2ieee754(realVal);
     }
 
     return { 'hexVal': hexVal, 'binVal': binVal, 'realVal': realVal }
+}
+
+function testInt(num) {
+    return (/^\d+$/g).test(num);
+}
+
+function validateiee754(s, e, m) {
+    if (!testInt(s) || !testInt(e) || !parsefloat(m)) throw 'Invalid input';
+    let sign = parseInt(s);
+    let exp = parseInt(e);
+    m = parseFloat(m);
+    if (isNaN(sign) || isNaN(exp) || isNaN(m)) throw 'Invalid input';
+    if (!(sign == 0 || sign == 1)) throw 'invalid sign input';
+
+    // Special cases
+    if (m != 0 && exp === 255) throw 'special case identified: NaN';
+    if (sign == 0 && m == 0 && exp === 255) throw 'special case identified: +Infinity';
+    if (sign == 1 && m == 0 && exp === 255) throw 'special case identified: -Infinity';
+
+    if (exp === 0) {
+        (m !== 0) ? alert('special case identified: Denormalized numbers') : alert('special case identified: Zero');
+        return;
+    }
+
+    // Special cases
+    if (exp < 0 || exp > 255) throw 'exponent value out of range';
+    if (m < 0 || m > 1) throw 'mantissa value out of range';
+
+
+
 }
 
 function parsefloat(num) {
@@ -991,7 +1025,7 @@ export function operate(val1, val2, operation, format) {
     let realVal, hexVal, binVal, output;
 
     if (format == "real") {
-        if(!(parsefloat(val1)) || !(parsefloat(val2))) throw 'Input entered is invalid';
+        if (!(parsefloat(val1)) || !(parsefloat(val2))) throw 'Input entered is invalid';
         output = compute(val1, val2, operation);
     }
     else if (format == "hex") {
