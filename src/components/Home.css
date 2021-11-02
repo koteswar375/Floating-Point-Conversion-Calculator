@@ -1,25 +1,13 @@
-.output {
-    width: 75%;
-    padding: 30px;
-}
-
-.format {
-    display:flex;
-    padding: 10px;
-}
-
-.iee754 {
+.wrapper {
+    background-color: #282c34;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
-}
-
-
-
-.home {
-    padding:50px;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%;
+}
+
+input {
+    width: 25%;
+    background-color: #282c34;
+    color: white;
 }
