@@ -959,7 +959,7 @@ function ieeee754ToHex(s, e, m) {
 export function convert(input, format) {
     if (!format || !input) throw 'Invalid input!';
     let realVal, hexVal, binVal;
-    if (format == "real") {
+    if (format == "float") {
         // input = parseFloat(input);
         if (!(parsefloat(input))) throw 'Input entered is invalid';
         hexVal = float2Hex(input);
@@ -971,7 +971,7 @@ export function convert(input, format) {
         hexVal = input;
         binVal = hex2ieee754(input);
     }
-    else if (format == "bin") {
+    else if (format == "ieee754") {
         let parts = input.split("|");
         let s = parts[0], e = parts[1], m = parts[2];
         validateiee754(s, e, m)
@@ -1024,7 +1024,7 @@ export function operate(val1, val2, operation, format) {
     if (!format || !val1 || !val2 || !operation) throw "Invalid input!";
     let realVal, hexVal, binVal, output;
 
-    if (format == "real") {
+    if (format == "float") {
         if (!(parsefloat(val1)) || !(parsefloat(val2))) throw 'Input entered is invalid';
         output = compute(val1, val2, operation);
     }
@@ -1033,7 +1033,7 @@ export function operate(val1, val2, operation, format) {
         val2 = hex2Float(val2);
         output = compute(val1, val2, operation);
     }
-    else if (format == "bin") {
+    else if (format == "ieee754") {
         let parts1 = val1.split("|");
         let parts2 = val2.split("|");
         let s1 = parts1[0], e1 = parts1[1], m1 = parts1[2];

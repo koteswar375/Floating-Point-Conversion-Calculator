@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import axios from 'axios';
 import {
   BrowserRouter as Router,
   Switch,
+  useHistory,
+  withRouter,
   Route,
   NavLink
 } from "react-router-dom";
@@ -10,24 +13,39 @@ import Conversion from './components/Conversion';
 import Operations from './components/Operations';
 import History from './components/History';
 import Home from './components/Home';
+import URL from './config';
+import {HistoryProvider} from './Contexts/history.context';
 
 
 
-function App() {
+function App(props) {
   const [loggedIn, setLoggedIn] = useState(false);
-
   useEffect(() => {
-    document.title = "IEEE 754 Converter"
-  }, [])
+    document.title = "IEEE 754 Converter";
+    // getHistory();
+  }, []);
+
+
+  // const getHistory = () => {
+  //     axios.get(`${URL}/items`)
+  //           .then((res) => {
+  //               console.log(res)
+  //               setData(res.data);
+  //           })
+  //           .catch((error) => {
+  //               console.log(error)
+  //               alert("Invalid inputs")
+  //           })
+  // }
 
   const handleEnter = (event) => {
     if(event.key === "Enter") {
+      props.history.push("/conversion");
       setLoggedIn(true);
     }
   }
 
   return (
-    <Router>
       <div className="App">
         {loggedIn ?
           <header className="App-header">
@@ -41,6 +59,7 @@ function App() {
               <Route exact path="/">
                 <Home />
               </Route>
+              <HistoryProvider>
               <Route path="/operations">
                 <Operations />
               </Route>
@@ -48,14 +67,14 @@ function App() {
                 <Conversion />
               </Route>
               <Route path="/history">
-                <History />
+                <History/>
               </Route>
+              </HistoryProvider>
             </Switch>
           </header>
           : <Home handleEnter = {handleEnter}/>}
       </div>
-    </Router>
   );
 }
 
-export default App;
+export default withRouter(App);

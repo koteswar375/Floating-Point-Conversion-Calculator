@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import './Operations.css';
 import { operate } from '../Math';
+import axios from 'axios';
+import URL from '../config';
+
 
 const Operations = () => {
-    const [format, setFormat] = useState('real');
+    const [format, setFormat] = useState('float');
     const [operation, setOperation] = useState('')
     const [realVal, setrealVal] = useState('');
     const [binVal, setbinVal] = useState('');
@@ -36,11 +39,12 @@ const Operations = () => {
     }
 
     const submit = (event) => {
-        let value1 = (format === "bin") ? `${iee754Val1.sign}|${iee754Val1.exp}|${iee754Val1.mantissa}` : val1;
-        let value2 = (format === "bin") ? `${iee754Val2.sign}|${iee754Val2.exp}|${iee754Val2.mantissa}` : val2;
+        let value1 = (format === "ieee754") ? `${iee754Val1.sign}|${iee754Val1.exp}|${iee754Val1.mantissa}` : val1;
+        let value2 = (format === "ieee754") ? `${iee754Val2.sign}|${iee754Val2.exp}|${iee754Val2.mantissa}` : val2;
         let binVal, realVal, hexVal;
         try {
             ({ binVal, realVal, hexVal } = operate(value1, value2, operation, format));
+            addToHistory({Type: 'operation', InputType: format});
             setbinVal(binVal);
             sethexVal(hexVal);
             setrealVal(realVal);
@@ -51,17 +55,18 @@ const Operations = () => {
             setrealVal('')
         }
 
-        // axios.post(`${URL}/operation`, { format, val1, val2, operation })
-        //     .then((res) => {
-        //         const { realVal, binVal, hexVal } = res['data'];
-        //         setbinVal(binVal)
-        //         sethexVal(hexVal)
-        //         setrealVal(realVal)
-        //     })
-        //     .catch((error) => {
-        //         console.log(error)
-        //         alert("Invalid inputs")
-        //     })
+        
+    }
+
+    const addToHistory = ({Type, InputType}) => {
+        axios.post(`${URL}/items`, { Type, InputType })
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((error) => {
+                console.log(error)
+                alert("Invalid inputs")
+            })
     }
     return (
         <div className="container">
@@ -70,12 +75,12 @@ const Operations = () => {
             </div>
             <div className="format">
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" checked={format === "real"} onChange={handleChange} name="input_format1" value='real' type="radio" id="real" />
-                    <label className="form-check-label" htmlFor="real">Float</label>
+                    <input className="form-check-input" checked={format === "float"} onChange={handleChange} name="input_format1" value='float' type="radio" id="reafloatl" />
+                    <label className="form-check-label" htmlFor="float">Float</label>
                 </div>
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" onChange={handleChange} name="input_format1" value='bin' type="radio" id="bin" />
-                    <label className="form-check-label" htmlFor="bin">IEE754</label>
+                    <input className="form-check-input" onChange={handleChange} name="input_format1" value='ieee754' type="radio" id="ieee754" />
+                    <label className="form-check-label" htmlFor="ieee754">IEE754</label>
                 </div>
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" onChange={handleChange} name="input_format1" value='hex' type="radio" id="hex" />
@@ -84,7 +89,7 @@ const Operations = () => {
             </div>
             <div className="input">
                 {
-                    (format === 'bin') ? (
+                    (format === 'ieee754') ? (
                         <div>
                             <div className="d-flex mx-2">
                                 <input type="text" val={iee754Val1.sign} onChange={(e) => setiee754Val1({ sign: e.target.value, exp: iee754Val1.exp, mantissa: iee754Val1.mantissa })} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />

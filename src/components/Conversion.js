@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import './Conversion.css';
 import { convert } from '../Math';
+import { HistoryContext } from '../Contexts/history.context';
+import axios from 'axios';
+import URL from '../config';
 
 
 
 const Conversion = () => {
-    const [format, setFormat] = useState('real');
+    const [format, setFormat] = useState('float');
     const [realVal, setrealVal] = useState('');
     const [binVal, setbinVal] = useState("");
     const [hexVal, sethexVal] = useState('');
@@ -13,7 +16,13 @@ const Conversion = () => {
     const [exp, setExp] = useState('');
     const [mantissa, setMantissa] = useState('');
     const [val, setVal] = useState('');
+    const historyContext = useContext(HistoryContext);
 
+
+    useEffect(() => {
+        document.title = "IEEE 754 Converter";
+        getHistory();
+      }, []);
 
     const handleChange = (event) => {
         const format = event.target.value;
@@ -27,11 +36,37 @@ const Conversion = () => {
         setMantissa('');
     }
 
+    const getHistory = () => {
+        axios.get(`${URL}/items`)
+              .then((res) => {
+                  console.log(res)
+                //   setData(res.data);
+                  historyContext.setHistory(res.data);
+              })
+              .catch((error) => {
+                  console.log(error)
+                  alert("Invalid inputs")
+              })
+    }
+
+
+    const addToHistory = ({Type, InputType}) => {
+        axios.post(`${URL}/items`, { Type, InputType })
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((error) => {
+                console.log(error)
+                alert("Invalid inputs")
+            })
+    }
+
     const submit = (event) => {
-        let value = (format === "bin") ? `${sign}|${exp}|${mantissa}` : val;
+        let value = (format === "ieee754") ? `${sign}|${exp}|${mantissa}` : val;
         let binVal, realVal, hexVal;
         try {
             ({ binVal, realVal, hexVal } = convert(value, format));
+            addToHistory({Type: 'conversion', InputType: format});
             setbinVal(binVal);
             sethexVal(hexVal);
             setrealVal(realVal);
@@ -62,12 +97,12 @@ const Conversion = () => {
             
             <div className="format">
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" checked={format === 'real'} onChange={handleChange} name="input_format" value='real' type="radio" id="real" />
-                    <label className="form-check-label" htmlFor="real">Float</label>
+                    <input className="form-check-input" checked={format === 'float'} onChange={handleChange} name="input_format" value='float' type="radio" id="float" />
+                    <label className="form-check-label" htmlFor="float">Float</label>
                 </div>
                 <div className="form-check form-check-inline">
-                    <input className="form-check-input" onChange={handleChange} name="input_format" value='bin' type="radio" id="bin" />
-                    <label className="form-check-label" htmlFor="bin">IEEE-754</label>
+                    <input className="form-check-input" onChange={handleChange} name="input_format" value='ieee754' type="radio" id="ieee754" />
+                    <label className="form-check-label" htmlFor="ieee754">IEEE-754</label>
                 </div>
                 <div className="form-check form-check-inline">
                     <input className="form-check-input" onChange={handleChange} name="input_format" value='hex' type="radio" id="hex" />
@@ -78,7 +113,7 @@ const Conversion = () => {
             {/* Input */}
             <div className="w-75  justify-content-center  d-flex">
                 {
-                    (format === 'bin') ? (
+                    (format === 'ieee754') ? (
                         <div className="d-flex">
                             <input type="text" onChange={(e) => setSign(e.target.value)} value={sign} placeholder="sign" style={{ flexBasis: '30%' }} className="form-control" />
                             <input type="text" onChange={(e) => setExp(e.target.value)} value={exp} placeholder="exponent(0-255)" className="form-control mx-2" />
