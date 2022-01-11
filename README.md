@@ -2,9 +2,9 @@
 
 This is a project assignment as part of my Software Engineering lifecycle course
 
-![logo](https://raw.githubusercontent.com/koteswar375/Spacestagram/main/src/Spacestagram.jpg)
+![logo](https://raw.githubusercontent.com/koteswar375/Floating-Point-Conversion-Calculator/main/src/logo.jpg)
 
-The site is hosted at https://koteswar375.github.io/Spacestagram/
+https://koteswar375.github.io/Floating-Point-Conversion-Calculator/
 
 ## Getting Started with App
 
