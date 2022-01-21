@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/Floating-Point-Conversion-Calculator/static/css/main.7e824dc2.chunk.css",
+    "main.js": "/Floating-Point-Conversion-Calculator/static/js/main.f9b89ad7.chunk.js",
+    "main.js.map": "/Floating-Point-Conversion-Calculator/static/js/main.f9b89ad7.chunk.js.map",
+    "runtime-main.js": "/Floating-Point-Conversion-Calculator/static/js/runtime-main.a3451e30.js",
+    "runtime-main.js.map": "/Floating-Point-Conversion-Calculator/static/js/runtime-main.a3451e30.js.map",
+    "static/css/2.f1d0da30.chunk.css": "/Floating-Point-Conversion-Calculator/static/css/2.f1d0da30.chunk.css",
+    "static/js/2.8de4f871.chunk.js": "/Floating-Point-Conversion-Calculator/static/js/2.8de4f871.chunk.js",
+    "static/js/2.8de4f871.chunk.js.map": "/Floating-Point-Conversion-Calculator/static/js/2.8de4f871.chunk.js.map",
+    "static/js/3.6b9103cd.chunk.js": "/Floating-Point-Conversion-Calculator/static/js/3.6b9103cd.chunk.js",
+    "static/js/3.6b9103cd.chunk.js.map": "/Floating-Point-Conversion-Calculator/static/js/3.6b9103cd.chunk.js.map",
+    "index.html": "/Floating-Point-Conversion-Calculator/index.html",
+    "static/css/2.f1d0da30.chunk.css.map": "/Floating-Point-Conversion-Calculator/static/css/2.f1d0da30.chunk.css.map",
+    "static/css/main.7e824dc2.chunk.css.map": "/Floating-Point-Conversion-Calculator/static/css/main.7e824dc2.chunk.css.map",
+    "static/js/2.8de4f871.chunk.js.LICENSE.txt": "/Floating-Point-Conversion-Calculator/static/js/2.8de4f871.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a3451e30.js",
+    "static/css/2.f1d0da30.chunk.css",
+    "static/js/2.8de4f871.chunk.js",
+    "static/css/main.7e824dc2.chunk.css",
+    "static/js/main.f9b89ad7.chunk.js"
+  ]
+}
